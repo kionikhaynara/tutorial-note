@@ -2,7 +2,7 @@
 #önemli not top bilgisayar hızına bağlı olarak çok hızlı veya çok yavaş olabilir
 
 import turtle
-import os #linux kullanıyorum #ı use linux mint
+import os #linux kullanıyorum #ı use linux mint ses için
 
 #pencere özellikleri
 
@@ -101,11 +101,11 @@ while True:
     if ball.ycor() > 290:
         ball.sety(290)
         ball.dy *= -1
-        os.system("aplay lol1.wav")
+        os.system("aplay lol1.wav") #bu kısmı .py nin bulunduğu ses yası ile değiştir
     if ball.ycor() < -290:
         ball.sety(-290)
         ball.dy *= -1
-        os.system("aplay lol1.wav")
+        os.system("aplay lol1.wav") #bu kısmı .py nin bulunduğu ses yası ile değiştir
 
     #yanlardan dışarı çıkar ve puan gelir ardından top merkeze gider
     if ball.xcor() > 390:
