@@ -1,0 +1,136 @@
+#important note top can be too fast or too slow depending on computer speed
+#önemli not top bilgisayar hızına bağlı olarak çok hızlı veya çok yavaş olabilir
+
+import turtle
+import os #linux kullanıyorum #ı use linux mint
+
+#pencere özellikleri
+
+wm = turtle.Screen()
+wm.title("Pong Forever @Kioni")
+wm.bgpic('arka_plan.png')  #arka plana resim atamak
+#wm.bgcolor("dark orchid") #arka plana renk atamak
+wm.setup(width=800, height=600)
+wm.tracer(0)
+
+
+# Score //başlangıç
+score_a = 0
+score_b = 0
+
+# paddle A //karakter objesi a
+paddle_a = turtle.Turtle()
+paddle_a.speed(0)
+paddle_a.shapesize(stretch_wid=5, stretch_len=1)
+paddle_a.shape("square")
+paddle_a.color("magenta")
+paddle_a.penup()
+paddle_a.goto(-350, 0)
+
+# paddle B //karakter objesi b
+paddle_b = turtle.Turtle()
+paddle_b.speed(0)
+paddle_b.shapesize(stretch_wid=5, stretch_len=1)
+paddle_b.shape("square")
+paddle_b.color("magenta")
+paddle_b.penup()
+paddle_b.goto(350, 0)
+
+
+# ball //top objesi
+ball = turtle.Turtle()
+ball.speed(0)
+ball.shape("square")
+ball.color("deep pink")
+ball.penup()
+ball.goto(0, 0)
+
+ball.dx = 1
+ball.dy = -1
+
+#pen  //skor
+pen = turtle.Turtle()
+pen.speed(0)
+pen.color("pale violet red")
+pen.penup()
+pen.hideturtle()
+pen.goto(0, 260)
+pen.write("player A:0 Player B:0", align="center", font=("Courier" , 24 , "normal"))
+
+# function paddle hareketi
+def paddle_a_up():
+    y = paddle_a.ycor()
+    y += 20
+    paddle_a.sety(y)
+
+def paddle_a_down():
+    y = paddle_a.ycor()
+    y -= 20
+    paddle_a.sety(y)
+
+def paddle_b_up():
+    y = paddle_b.ycor()
+    y += 20
+    paddle_b.sety(y)
+
+def paddle_b_down():
+    y = paddle_b.ycor()
+    y -= 20
+    paddle_b.sety(y)
+    
+
+
+#keyboard binding //paddle hareketi tuşları
+wm.listen()
+wm.onkeypress(paddle_a_up, "w")
+wm.onkeypress(paddle_a_down, "s")
+
+wm.onkeypress(paddle_b_up, "Up")
+wm.onkeypress(paddle_b_down, "Down")
+
+#main game loop //oyun döngüsü
+while True:
+    wm.update()
+
+    #move the ball
+    ball.setx(ball.xcor() + ball.dx)
+    ball.sety(ball.ycor() + ball.dy)
+
+    #border checking
+    #top üst ve alt kısma çarpar geri seker
+    if ball.ycor() > 290:
+        ball.sety(290)
+        ball.dy *= -1
+        os.system("aplay lol1.wav")
+    if ball.ycor() < -290:
+        ball.sety(-290)
+        ball.dy *= -1
+        os.system("aplay lol1.wav")
+
+    #yanlardan dışarı çıkar ve puan gelir ardından top merkeze gider
+    if ball.xcor() > 390:
+        ball.goto(0, 0)
+        ball.dx *= -1
+        score_a += 1
+        pen.clear()
+        pen.write("player A:{} Player B:{}".format(score_a,score_b), align="center", font=("Courier" , 24 , "normal"))
+
+
+    if ball.xcor() < -390:
+        ball.goto(0, 0)
+        ball.dx *= -1
+        score_b += 1
+        pen.clear()
+        pen.write("player A:{} Player B:{}".format(score_a,score_b), align="center", font=("Courier" , 24 , "normal"))
+
+    
+    #pattle and ball collision //çarpışma
+    if (ball.xcor() > 340 and ball.xcor() < 350) and (ball.ycor() < paddle_b.ycor() + 50 and ball.ycor() > paddle_b.ycor() -50):
+        ball.setx(340)
+        ball.dx *= -1
+        os.system("aplay lol1.wav") #sound //ses dosyası
+
+    if (ball.xcor() < -340 and ball.xcor() > -350) and (ball.ycor() < paddle_a.ycor() + 50 and ball.ycor() > paddle_a.ycor() -50):
+        ball.setx(-340)
+        ball.dx *= -1
+        os.system("aplay lol1.wav") #sound //ses dosyası
